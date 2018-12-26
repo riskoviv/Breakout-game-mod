@@ -40,7 +40,6 @@ var isStarted = false,
     
     score = brickRowCount * brickColumnCount;
 
-displayData();
 
 // выбор случайного цвета
 function chooseRandomColor() {
@@ -143,7 +142,7 @@ function drawAutopilot() {
     x += dx;
     y += dy;
 
-    // автопилот
+    // автопилот (простое следование за мячом)
     paddleX = x - paddleWidth / 2;
 
     // запуск анимации
@@ -233,7 +232,6 @@ function boundCollisionDetection() {
             if (dy > 0) {
                 dy = -dy;
             }
-            document.title = `${diff}, ${dx}, ${dy}`; // для отладки
         }
         // если шар коснулся пола (конец игры)
         else if (y > canvas.height - ballRadius) {
@@ -266,7 +264,7 @@ function brickCollisionDetection() {
                         brick.status = 0;
                         // изменение цвета шара на цвет последнего разбитого кирпича
                         ballColor = brick.rgb;
-                        // + 1 очко
+                        // уменьшение кол-ва оставшихся кирпичей
                         score--;
                         // ПОБЕДА
                         if (score == 0) {
@@ -288,31 +286,6 @@ checkIsHintDisplayed();
 function start() {
     isStarted = true;
     draw();
-    displayData();
-}
-
-// проверка, отображался ли текст с подсказками
-// подсказка появляется только перед первым стартом
-function checkIsHintDisplayed() {
-    if (wasPaused == false) {
-        score = brickRowCount * brickColumnCount;
-        if (sessionStorage.getItem("isHintDisplayed") === null) {
-            drawHintText();
-            sessionStorage.setItem("isHintDisplayed", "true");
-        }
-    }
-}
-
-// отрисовка текста с подсказками управления
-function drawHintText() {
-    ctx.font = "48px Arial";
-    var hintText1 = "Move paddle: 'A' or ←, 'D' or →";
-    ctx.fillStyle = "#666";
-    var hintText2 = "Pause: Esc";
-    var metrics1 = ctx.measureText(hintText1);
-    var metrics2 = ctx.measureText(hintText2);
-    ctx.fillText(hintText1, (canvas.width - metrics1.width) / 2, (canvas.height - 48) / 2);
-    ctx.fillText(hintText2, (canvas.width - metrics2.width) / 2, (canvas.height + 48) / 2);
 }
 
 // пауза (или приостановка перерисовки по таймеру)
@@ -323,7 +296,7 @@ function pause() {
 }
 
 
-// отрисовка текста со счётом
+// отрисовка разного текста (оставшиеся кирпичи, пауза, выигрыш, проигрыщ)
 function drawScoreText() {
     ctx.font = "16px Arial";
     ctx.fillStyle = "#000";
@@ -364,6 +337,31 @@ function drawLoseText() {
     ctx.fillText(loseText2, (canvas.width - metrics2.width) / 2, (canvas.height + 48) / 2);
 }
 
+// отрисовка текста с подсказками управления
+function drawHintText() {
+    ctx.font = "48px Arial";
+    var hintText1 = "Move paddle: 'A' or ←, 'D' or →";
+    ctx.fillStyle = "#666";
+    var hintText2 = "Pause: Esc";
+    var metrics1 = ctx.measureText(hintText1);
+    var metrics2 = ctx.measureText(hintText2);
+    ctx.fillText(hintText1, (canvas.width - metrics1.width) / 2, (canvas.height - 48) / 2);
+    ctx.fillText(hintText2, (canvas.width - metrics2.width) / 2, (canvas.height + 48) / 2);
+}
+
+// проверка, отображался ли текст с подсказками
+// подсказка появляется только перед первым стартом
+function checkIsHintDisplayed() {
+    if (wasPaused == false) {
+        score = brickRowCount * brickColumnCount;
+        if (sessionStorage.getItem("isHintDisplayed") === null) {
+            drawHintText();
+            sessionStorage.setItem("isHintDisplayed", "true");
+        }
+    }
+}
+
+
 // изменение размера окна
 // всё возвращается в исходное состояние
 function resize() {
@@ -392,10 +390,4 @@ function resize() {
     resetBricks();
     draw();
     pause();
-    displayData();
-}
-
-// разные переменные в заголовке
-function displayData() {
-    document.title = `${canvas.width}, ${canvas.height}, ${paddleWidth}, ${paddleHeight}`;
 }

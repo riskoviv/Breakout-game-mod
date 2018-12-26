@@ -7,7 +7,7 @@ Features that I've been additionally implemented in this game:
 3) Adjustment of canvas and all game elements to the size of the window when window size changes and at the game loading
 4) Minimal size of canvas at the loading, minimal paddle Y position
 5) Ball changes its color to the color of last destroyed brick
-6) Ball bouncing from every side of bricks, not only from bottom
+6) Ball bouncing from every side of bricks, not only from bottom/top
 7) Every brick in every different game has different random color
 8) Pausing by pressing Esc, displaying "PAUSE" text at the center of canvas (with counting lengh of text)
 9) Modified ball and floor collision detection (losing) with displaying a message and changing a paddle color
@@ -16,4 +16,6 @@ Features that I've been additionally implemented in this game:
 12) Different start ball movement direction at every start
 13) Controlling of paddle by 'A' and 'D' buttons additionally to arrows
 14) Displaying of win message and turning of an autopilot mode on after winning
-15) Displaying of control hints at the start (only at the first start)
+15) Displaying of control hints at the start (only at the first start (sessionStorage was used here))
+16) Displaying of count of bricks left instead of counting points
+17) Additional avoidance of ball stucking inside of paddle and beyond the game field borders
